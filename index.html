@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choffing - Best Products</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand">Choffing</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="cart.html">Orders <span class="cart-count">0</span></a>
+            <div id="nav-auth-links" style="display:inline;">
+                <a href="login.html">Login</a>
+                <a href="signup.html">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="auth-header">
+            <h1>Discover Our Collection</h1>
+            <p>Find the best electronics, clothing, and home accessories.</p>
+        </div>
+
+        <div class="filters-bar">
+            <div class="filter-group">
+                <label for="categoryFilter">Category:</label>
+                <select id="categoryFilter" style="width: auto;">
+                    <option value="all">All</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="home">Home</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="sortFilter">Sort by:</label>
+                <select id="sortFilter" style="width: auto;">
+                    <option value="default">Default</option>
+                    <option value="low-high">Price: Low to High</option>
+                    <option value="high-low">Price: High to Low</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="productGrid" class="product-grid">
+            <!-- Products will be injected here via store.js -->
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/store.js"></script>
+</body>
+</html>

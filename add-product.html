@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choffing - Add Product</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand">Choffing</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="cart.html">Orders <span class="cart-count">0</span></a>
+            <div id="nav-auth-links" style="display:inline;">
+                <!-- Auth dynamic links -->
+            </div>
+        </div>
+    </nav>
+
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 900px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <div class="container main-content admin-layout">
+        <div class="card">
+            <div class="auth-header" style="margin-bottom: 1.5rem;">
+                <h2>Add a New Product</h2>
+                <p>Fill out the details to add a product to the catalog.</p>
+            </div>
+
+            <form id="addProductForm">
+                <div class="form-group">
+                    <label for="name">Product Name</label>
+                    <input type="text" id="name" required placeholder="e.g. Wireless Mouse">
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price (DA)</label>
+                    <input type="number" id="price" step="0.01" min="0" required placeholder="29.99">
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" required>
+                        <option value="" disabled selected>Select category...</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="home">Home</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Product Image</label>
+                    <input type="file" id="image" required accept="image/*">
+                    <small class="text-muted">Upload a valid image file for the product.</small>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1rem;">Add Product</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <div class="auth-header" style="margin-bottom: 1.5rem; text-align: left;">
+                <h2>Manage Inventory</h2>
+                <p>Delete out-of-stock products directly from the shop.</p>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border-color);">
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">ID</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Image</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Name</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Price</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminProductTable">
+                        <!-- Admin products injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card" style="grid-column: 1 / -1; margin-top: 1rem;">
+            <div class="auth-header" style="margin-bottom: 1.5rem; text-align: left;">
+                <h2>Customer Orders</h2>
+                <p>View and manage confirmed orders pending delivery.</p>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border-color);">
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Order ID</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Customer</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Location</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Items / Total</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminOrdersTable">
+                        <!-- Orders injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/store.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const renderOrders = () => {
+                const orders = JSON.parse(localStorage.getItem('ecommerce_orders')) || [];
+                const tbody = document.getElementById('adminOrdersTable');
+                if (!tbody) return;
+
+                tbody.innerHTML = '';
+
+                if (orders.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="padding: 2rem; text-align: center; color: var(--text-muted);">No pending orders found.</td></tr>';
+                    return;
+                }
+
+                orders.forEach((order, index) => {
+                    const itemNames = order.items.map(i => i.name).join(', ');
+                    const date = new Date(order.date).toLocaleDateString();
+
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid var(--border-color)';
+                    tr.innerHTML = `
+                        <td style="padding: 1rem; vertical-align: top;">
+                            <strong>${order.id}</strong><br>
+                            <small class="text-muted">${date}</small>
+                        </td>
+                        <td style="padding: 1rem; vertical-align: top;">
+                            ${order.customer.name}<br>
+                            ${order.customer.phone}
+                        </td>
+                        <td style="padding: 1rem; vertical-align: top; max-width: 250px;">
+                            ${order.customer.location}
+                        </td>
+                        <td style="padding: 1rem; vertical-align: top; max-width: 250px;">
+                            <span class="text-muted">${itemNames}</span><br>
+                            <strong style="color: var(--primary-color)">${parseFloat(order.total).toFixed(2)} DA</strong>
+                        </td>
+                        <td style="padding: 1rem; vertical-align: top;">
+                            ${order.status === 'Delivered'
+                            ? '<span style="color: var(--success, #2ecc71); font-weight: 600;">Delivered</span>'
+                            : `<button class="btn btn-primary fulfill-btn" data-index="${index}" style="padding: 0.5rem 1rem; font-size: 0.85rem;">Mark Delivered</button>`
+                        }
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // Attach event listeners for fulfill buttons
+                document.querySelectorAll('.fulfill-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const idx = parseInt(e.target.getAttribute('data-index'));
+                        const currentOrders = JSON.parse(localStorage.getItem('ecommerce_orders')) || [];
+                        if (currentOrders[idx]) {
+                            currentOrders[idx].status = 'Delivered';
+                            localStorage.setItem('ecommerce_orders', JSON.stringify(currentOrders));
+                            renderOrders();
+                            showToast("Order marked as delivered!");
+                        }
+                    });
+                });
+            };
+
+            renderOrders();
+        });
+    </script>
+</body>
+
+</html>

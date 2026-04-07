@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choffing - Orders</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="brand">Choffing</a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="cart.html">Orders <span class="cart-count">0</span></a>
+            <div id="nav-auth-links" style="display:inline;">
+                <!-- Dinamic auth -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container main-content">
+        <div class="cart-container" style="margin-bottom: 3rem;">
+            <div id="cartItems">
+                <!-- Cart items injected here via cart.js -->
+            </div>
+            <div class="cart-summary" id="cartSummaryBlock">
+                <h3 style="margin-bottom: 1rem; text-align: left;">Total: <span id="cartTotal">0.00 DA</span></h3>
+
+                <form id="orderForm" style="text-align: left; margin-top: 1.5rem;">
+                    <h4 style="margin-bottom: 1rem;">Delivery Details</h4>
+                    <div class="form-group">
+                        <label for="orderName">Full Name</label>
+                        <input type="text" id="orderName" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderPhone">Phone Number</label>
+                        <input type="tel" id="orderPhone" required pattern="^(0|\+213)[5-7][0-9]{8}$"
+                            title="Please enter a valid Algerian phone number starting with 05, 06, 07 or +213"
+                            placeholder="0550123456">
+                    </div>
+                    <div class="form-group">
+                        <label for="orderLocation">Delivery Location / Address</label>
+                        <textarea id="orderLocation" required placeholder="Algiers, Center" rows="3"
+                            style="width: 100%; padding: 0.8rem; border: 1px solid var(--border-color); border-radius: var(--radius); background: rgba(255, 255, 255, 0.05); color: var(--text-color); font-family: inherit; font-size: 1rem; resize: vertical; margin-top: 0.5rem;"></textarea>
+                    </div>
+                    <button type="submit" id="checkoutBtn" class="btn btn-primary" disabled
+                        style="width: 100%; margin-top: 1rem;">Confirm Order</button>
+                </form>
+            </div>
+        </div>
+
+        <h1 style="margin-bottom: 1rem;">My Orders</h1>
+        <div
+            style="margin-top: 1rem; padding: 1.5rem; background: transparent; border: 1px solid var(--border-color); border-radius: var(--radius-lg);">
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border-color);">
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Order ID</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Date</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Items</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Total</th>
+                            <th style="padding: 1rem; color: var(--text-muted); font-weight: 600;">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userOrdersTable">
+                        <!-- User orders injected via cart.js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+
+</html>
